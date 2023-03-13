@@ -8,6 +8,7 @@
         "@next/bundle-analyzer": "^13.1.6",
         "@react-icons/all-files": "^4.1.0",
         "axios": "^1.2.6",
+        "base58-js": "^2.0.0",
         "bip32": "^3.1.0",
         "bitcoin-address-validation": "^2.2.1",
         "bitcoinjs-lib": "^6.1.0",
@@ -40,7 +41,8 @@
         "react-useinterval": "^1.0.2",
         "sal.js": "^0.8.5",
         "sharp": "^0.31.3",
-        "tiny-secp256k1": "^2.2.1"
+        "tiny-secp256k1": "^2.2.1",
+        "viem": "^0.1.14"
     },
     "scripts": {
         "dev": "next dev",
