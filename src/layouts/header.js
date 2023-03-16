@@ -17,7 +17,7 @@ import menuData from "../data/general/menu.json";
 
 const Header = React.forwardRef(({ className, onConnectHandler, onDisconnectHandler }, ref) => {
     const { offcanvas, offcanvasHandler } = useOffcanvas();
-    const { nostrPublicKey, nostrAddress } = useContext(WalletContext);
+    const { nostrPublicKey, nostrAddress, ethAddress } = useContext(WalletContext);
 
     return (
         <>
@@ -39,21 +39,22 @@ const Header = React.forwardRef(({ className, onConnectHandler, onDisconnectHand
                             </div>
                         </div>
                         <div className="header-right">
-                            {!Boolean(nostrPublicKey) && (
-                                <div className="setting-option header-btn">
-                                    <div className="icon-box">
-                                        <Button
-                                            color="primary-alta"
-                                            className="connectBtn"
-                                            size="small"
-                                            onClick={onConnectHandler}
-                                        >
-                                            Connect Wallet
-                                        </Button>
+                            {!Boolean(nostrPublicKey) ||
+                                (!Boolean(ethAddress) && (
+                                    <div className="setting-option header-btn">
+                                        <div className="icon-box">
+                                            <Button
+                                                color="primary-alta"
+                                                className="connectBtn"
+                                                size="small"
+                                                onClick={onConnectHandler}
+                                            >
+                                                Connect Wallet
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                            {nostrPublicKey && nostrAddress && (
+                                ))}
+                            {(nostrPublicKey || ethAddress) && nostrAddress && (
                                 <div className="setting-option rn-icon-list user-account">
                                     <UserDropdown
                                         onDisconnect={onDisconnectHandler}

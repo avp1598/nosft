@@ -2,9 +2,8 @@ import PropTypes from "prop-types";
 import Image from "next/image";
 import Button from "@ui/button";
 import { HeadingType, TextType, ButtonType, ImageType } from "@utils/types";
-import { createWalletClient, custom, getAccount, keccak256 } from "viem";
 
-const HeroArea = ({ data, onConnectHandler }) => {
+const HeroArea = ({ data, onConnectHandler, onConnectMetamaskHandler }) => {
     return (
         <div className="slider-one rn-section-gapTop">
             <div className="container">
@@ -48,7 +47,7 @@ const HeroArea = ({ data, onConnectHandler }) => {
                                     // data-sal-delay={400 + 1 * 100}
                                     // data-sal="slide-up"
                                     // data-sal-duration="400"
-                                    onClick={connectMetamask}
+                                    onClick={onConnectMetamaskHandler}
                                 >
                                     Connect Using Metamask
                                 </Button>
@@ -74,25 +73,6 @@ const HeroArea = ({ data, onConnectHandler }) => {
     );
 };
 
-const connectMetamask = async () => {
-    const client = createWalletClient({
-        transport: custom(window.ethereum),
-    });
-    await client.requestAddresses();
-    const [address] = await client.getAddresses();
-    const account = getAccount(address);
-
-    const signature = await client.signMessage({
-        account,
-        data: "Sign this message to generate your Bitcoin Taproot key. This key will be used for your ordswap.io transactions.",
-    });
-    const hash = keccak256(signature);
-    console.log(hash);
-
-    // Sign this message to generate your Bitcoin Taproot key. This key will be used for your ordswap.io transactions.
-    // L5eNn7AD1TUD22mt3XcNikAsL5n2Fe6UAUgm8iLeZGfpSAKX5nJQ
-};
-
 HeroArea.propTypes = {
     data: PropTypes.shape({
         headings: PropTypes.arrayOf(HeadingType),
@@ -101,6 +81,7 @@ HeroArea.propTypes = {
         images: PropTypes.arrayOf(ImageType),
     }),
     onConnectHandler: PropTypes.func,
+    onConnectMetamaskHandler: PropTypes.func,
 };
 
 export default HeroArea;

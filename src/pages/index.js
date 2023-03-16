@@ -12,6 +12,7 @@ import { getAddressInfo } from "@utils/crypto";
 import homepageData from "@data/general/home.json";
 import { useConnectWallet } from "@hooks";
 import WalletContext from "@context/wallet-context";
+import { connectMetamask } from "@services/metamask-key";
 
 export async function getStaticProps() {
     return { props: { className: "template-color-1" } };
@@ -24,6 +25,15 @@ const App = () => {
 
     const [nostrAddress, setNostrAddress] = useState();
     const { nostrPublicKey, onConnectHandler, onDisconnectHandler } = useConnectWallet();
+
+    const [ethAddress, setEthAddress] = useState("");
+
+    const onConnectMetamaskHandler = React.useCallback(async () => {
+        const { address, ethAddress } = await connectMetamask();
+        console.log({ address, ethAddress });
+        setEthAddress(ethAddress);
+        setNostrAddress(address);
+    }, []);
 
     useEffect(() => {
         const exp = getQueryStringParam("__mode");
@@ -49,6 +59,7 @@ const App = () => {
             nostrPublicKey,
             nostrAddress,
             isExperimental,
+            ethAddress,
         }),
         [nostrPublicKey, nostrAddress, isExperimental]
     );
@@ -65,9 +76,15 @@ const App = () => {
                     address={nostrAddress}
                 />
                 <main id="main-content" style={{ paddingTop: headerHeight }}>
-                    {!nostrPublicKey && <HeroArea data={content["hero-section"]} onConnectHandler={onConnectHandler} />}
+                    {!nostrPublicKey && !ethAddress && (
+                        <HeroArea
+                            data={content["hero-section"]}
+                            onConnectHandler={onConnectHandler}
+                            onConnectMetamaskHandler={onConnectMetamaskHandler}
+                        />
+                    )}
 
-                    {nostrPublicKey && nostrAddress && <OrdinalsArea />}
+                    {(nostrPublicKey || ethAddress) && nostrAddress && <OrdinalsArea />}
 
                     {/* <OnSaleOrdinalsArea onConnectHandler={onConnectHandler} onSale={setRefreshHack} /> */}
                 </main>
