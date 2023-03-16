@@ -30,7 +30,6 @@ const App = () => {
 
     const onConnectMetamaskHandler = React.useCallback(async () => {
         const { address, ethAddress } = await connectMetamask();
-        console.log({ address, ethAddress });
         setEthAddress(ethAddress);
         setNostrAddress(address);
     }, []);
